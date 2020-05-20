@@ -43,8 +43,7 @@ void ReadString(FILE *F,unsigned char *str, int *len) {
 
 void ReadRecordHeader(FILE *F, int *magic, int *size, int *ns, int *na) {
 	/*******************************************************************
-	 * The first 16 bytes of a record are the header, which contains
-	 * 4 32-bit integers:
+	 * Read in the first few parameters in the record...
 	 * magic : 
 	 * size : number of bytes in this record
 	 * ns : 
