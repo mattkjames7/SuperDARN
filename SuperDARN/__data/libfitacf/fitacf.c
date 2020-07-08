@@ -220,7 +220,7 @@ int GetArrayLen(FILE *F, long int FileOffset, int na) {
 			return r;
 		} else if (strcmp(strbuff,"w_l") == 0)  {
 			return r;
-		} else if (strcmp(strbuff,"glfg") == 0)  {
+		} else if (strcmp(strbuff,"gflg") == 0)  {
 			return r;
 		} else if (strcmp(strbuff,"slist") == 0)  {
 			return r;
