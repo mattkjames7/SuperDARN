@@ -1,8 +1,10 @@
 #ifndef __FITACF_H__
 #define __FITACF_H__
+#define _USE_MATH_DEFINES
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <math.h>
+#include <cstring>
 #endif
 using namespace std;
 
@@ -41,7 +43,7 @@ class fitacf {
 	
 	public:
 		/* constructors/destructors */
-		fitacf(const char*);
+		fitacf(const char*,bool);
 		~fitacf();
 		
 		/* member functions to retrieve parameters */
@@ -89,7 +91,7 @@ class fitacf {
 		void _CountRecords();
 
 		/* read a string */
-		void _ReadString(unsigned char *str, int *len);
+		void _ReadString(char *str, int *len);
 
 		/* read the header of a record */
 		void _ReadRecordHeader(int *magic, int *size, int *ns, int *na);
@@ -104,4 +106,4 @@ class fitacf {
 		void _GetTotalArrayLen();
 		void _ReadAllArrays();		
 
-}
+};

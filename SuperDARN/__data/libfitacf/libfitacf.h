@@ -4,10 +4,10 @@
 #include <stdlib.h>
 #include <vector>
 #include <map>
+#include "listmapkeys.h"
+#include "fitacf.h"
 #endif
 
-/* map which will contain the instances of fitacf */
-extern std::map<int,fitacf*> acfmap;
 
 
 int GetNewRandomNumber();
@@ -23,5 +23,7 @@ extern "C" {
 						int *ScanCode, int *nGates, int *smsep, 
 						int *lagfr, int *ArrLen, int *RecLen, int *na, 
 						long int *ArrOffset);
-	Delfitacf(int I);		
+	void Delfitacf(int I);		
 }
+/* map which will contain the instances of fitacf */
+extern std::map<int,fitacf*> acfmap;

@@ -1,10 +1,20 @@
-all: fitacf.o libfitacf.so
+# CFLAGS for CC
+CFLAGS=-lm -fopenmp -g
 
-fitacf.o:
-	gcc -c -fpic fitacf.c
+# Compiler
+CCo=g++ -fPIC -c $(CFLAGS)
+CC=g++ -fPIC $(CFLAGS)
 
-libfitacf.so:
-	gcc -shared fitacf.o -o libfitacf.so -lm
+
+all: obj lib
+
+obj:
+	$(CCo) fitacf.cc -o fitacf.o
+	$(CCo) libfitacf.cc -o libfitacf.o
+	
+lib:
+	$(CC) -shared *.o -o libfitacf.so
+	rm -v *.o
 
 clean:
-	rm fitacf.o libfitacf.so
+	rm -v libfitacf.so

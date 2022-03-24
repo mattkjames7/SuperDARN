@@ -7,7 +7,7 @@ fitacf::fitacf(const char *fname, bool Verbose) {
 	
 	/* open the fitacf file */
 	if (Verbose) {
-		printf("Reading File: %s\n",FileName);
+		printf("Reading File: %s\n",fname);
 	}
 	F_ = fopen(fname,"r");
 	fileExists_ = (F_ != NULL);
@@ -81,17 +81,17 @@ void fitacf::_CountRecords() {
 	while (FPos < FLen_) {
 		fseek(F_,FPos+4,SEEK_SET);
 		fread(&tmp,sizeof(int),1,F_);
-		n++;
+		n_++;
 		FPos+=tmp;
 	}
 	rewind(F_);
 }
 
-void fitacf::_ReadString(unsigned char *str, int *len) {
+void fitacf::_ReadString(char *str, int *len) {
 	/* Read a string (of char) of length len from the file at the 
 	 * current file offset*/
 	len[0] = 0;
-	unsigned char tmp = 1;
+	char tmp = 1;
 	while (tmp != 0) {
 		fread(&tmp,sizeof(char),1,F_);
 		str[len[0]] = tmp;
@@ -124,13 +124,13 @@ void fitacf::_ReadRecordScalars(int ns, int I) {
 	int yr, mo, dy, hr, mt, sc, us;
 	
 	/* string buffers */
-	unsigned char strbuff[256], tmpstr[256]
+	char strbuff[256], tmpstr[256];
 	
 	/* character denoting the data type */
-	unsigned char dtype;
+	char dtype;
 	
 	/* temporary data types */
-	unsigned char tmpchar;
+	char tmpchar;
 	short int tmpshrt;
 	int tmpint;
 	float tmpflt;
@@ -140,13 +140,13 @@ void fitacf::_ReadRecordScalars(int ns, int I) {
 	int i;
 	for (i=0;i<ns;i++) {
 		/* read the name of the scalar */
-		ReadString(F_,strbuff,&l);
+		_ReadString(strbuff,&l);
 		
 		/* get the dtype, then read the value in */
-		fread(&dtype,sizeof(unsigned char),1,F_);
+		fread(&dtype,sizeof(char),1,F_);
 		switch (dtype) {
 			case 1:
-				fread(&tmpchar,sizeof(unsigned char),1,F_);
+				fread(&tmpchar,sizeof(char),1,F_);
 				break;
 			case 2:
 				fread(&tmpshrt,sizeof(short int),1,F_);
@@ -161,7 +161,7 @@ void fitacf::_ReadRecordScalars(int ns, int I) {
 				fread(&tmpdbl,sizeof(double),1,F_);
 				break;
 			default:
-				ReadString(F_,tmpstr,&l);
+				_ReadString(tmpstr,&l);
 		}
 		
 		/* set the appropriate scalars_ variable (I wonder if there's
@@ -211,10 +211,10 @@ void fitacf::_ReadRecordArrays(int I, int pos) {
 	int l;
 		
 	/* string buffers */
-	unsigned char strbuff[256], tmpstr[256]
+	char strbuff[256], tmpstr[256];
 	
 	/* character denoting the data type */
-	unsigned char dtype;
+	char dtype;
 	
 	/* number of array dimensions */
 	int dim;
@@ -229,7 +229,7 @@ void fitacf::_ReadRecordArrays(int I, int pos) {
 	/* temporary arrays - I guess I used 120 because that's more than
 	 * the most ranges that the radars would have. It could break in 
 	 * future though*/
-	unsigned char tmpchar[120];
+	char tmpchar[120];
 	short int tmpshrt[120];
 	int tmpint[120];
 	float tmpflt[120];
@@ -244,7 +244,7 @@ void fitacf::_ReadRecordArrays(int I, int pos) {
 	int i, j;
 	for (i=0;i<scalars_[I].na;i++) {
 		/* get the name of the array */
-		_ReadString(F_,strbuff,&l);
+		_ReadString(strbuff,&l);
 		
 		/* read the datatype character */
 		fread(&dtype,sizeof(char),1,F_);
@@ -264,7 +264,7 @@ void fitacf::_ReadRecordArrays(int I, int pos) {
 		/* read the data into a temporary variable */
 		switch ((int) dtype) {
 			case 1:
-				fread(tmpchar,sizeof(unsigned char),r,F_);
+				fread(tmpchar,sizeof(char),r,F_);
 				break;
 			case 2:
 				fread(tmpshrt,sizeof(short int),r,F_);
@@ -280,7 +280,7 @@ void fitacf::_ReadRecordArrays(int I, int pos) {
 				break;
 			default:
 				for (j=0;j<r;j++) {
-					ReadString(F_,tmpstr,&l);
+					_ReadString(tmpstr,&l);
 				}
 				
 		}
@@ -289,27 +289,27 @@ void fitacf::_ReadRecordArrays(int I, int pos) {
 		 * struct stored within the object. (perhaps this could be done 
 		 * within the case statment above to slightly improve speed) */
 		if (strcmp(strbuff,"v") == 0) {
-			for (j=0;j<al;j++){
+			for (j=0;j<scalars_[I].ArrLen;j++){
 				V[sp+j] = tmpflt[j];
 				nread++;
 			}
 		} else if (strcmp(strbuff,"p_l") == 0)  {
-			for (j=0;j<al;j++){
+			for (j=0;j<scalars_[I].ArrLen;j++){
 				P_l[sp+j] = tmpflt[j];
 				nread++;
 			}
 		} else if (strcmp(strbuff,"w_l") == 0)  {
-			for (j=0;j<al;j++){
+			for (j=0;j<scalars_[I].ArrLen;j++){
 				W_l[sp+j] = tmpflt[j];
 				nread++;
 			}
 		} else if (strcmp(strbuff,"gflg") == 0)  {
-			for (j=0;j<al;j++){
+			for (j=0;j<scalars_[I].ArrLen;j++){
 				Gnd[sp+j] = tmpchar[j];
 				nread++;
 			}
 		} else if (strcmp(strbuff,"slist") == 0)  {
-			for (j=0;j<al;j++){
+			for (j=0;j<scalars_[I].ArrLen;j++){
 				Gate[sp+j] = tmpshrt[j];
 				nread++;
 			}
@@ -343,10 +343,10 @@ int fitacf::_GetArrayLen(long int FileOffset, int na) {
 	int l;
 		
 	/* string buffers */
-	unsigned char strbuff[256], tmpstr[256]
+	char strbuff[256], tmpstr[256]
 	
 	/* character denoting the data type */
-	unsigned char dtype;
+	char dtype;
 	
 	/* number of array dimensions */
 	int dim;
@@ -361,7 +361,7 @@ int fitacf::_GetArrayLen(long int FileOffset, int na) {
 	/* temporary arrays - I guess I used 120 because that's more than
 	 * the most ranges that the radars would have. It could break in 
 	 * future though*/
-	unsigned char tmpchar[120];
+	char tmpchar[120];
 	short int tmpshrt[120];
 	int tmpint[120];
 	float tmpflt[120];
@@ -405,7 +405,7 @@ int fitacf::_GetArrayLen(long int FileOffset, int na) {
 		/* read the data into a temporary variable */
 		switch ((int) dtype) {
 			case 1:
-				fread(tmpchar,sizeof(unsigned char),r,F_);
+				fread(tmpchar,sizeof(char),r,F_);
 				break;
 			case 2:
 				fread(tmpshrt,sizeof(short int),r,F_);
