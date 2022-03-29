@@ -1,0 +1,64 @@
+import numpy as np
+from ..Tools.FileSearch import FileSearch
+from .. import Globals
+import DateTimeTools as TT
+
+def _GetFitacfFiles(Radar,Date,ut):
+	
+	#get the base path for the radar
+	RadarPath = Globals.FitACFPath + '{:s}/'.format(Radar.lower())
+	
+	#get a list of dates
+	if np.size(Date) == 2:
+		dates = TT.ListDates(Date[0],Date[1])
+	else:
+		dates = np.array([Date]).flatten()
+		
+	#work out the years
+	years = dates//10000
+	uyears = np.unique(years)
+	nuy = uyears.size
+	
+	#get the list of files which correspond to those dates
+	files = np.array([],dtype='object')
+	filesp = np.array([],dtype='object')
+	#loop through each unique year folder
+	for i in range(0,nuy):
+		path = RadarPath + '{:04d}/'.format(uyears[i])
+		use = np.where(years == uyears[i])[0]
+		nu = use.size
+		#then each date which should be in that folder
+		for j in range(0,nu):
+			f = FileSearch(path,'{:08d}*.fitacf.bz2'.format(dates[use[j]]))
+			if f.size > 0:
+				#if we find matches, then add them!
+				fp = [path+k for k in f]
+				files = np.append(files,f)
+				filesp = np.append(filesp,fp)	
+	
+	if files.size == 0:
+		return filesp,files
+	
+	#sort by their name
+	srt = np.argsort(files)
+	files = files[srt]
+	filesp = filesp[srt]
+
+
+	#get the dates and times for each file
+	fDate = np.array([np.int32(s[0:8]) for s in files])
+	fhhmm = np.array([np.int32(s[9:13]) for s in files])
+	hh = fhhmm/100
+	mm = fhhmm//100
+	fut = hh + mm/60.0
+	
+	#limit to the files within ut range
+	futc = TT.ContUT(fDate,fut)
+	utc0 = TT.ContUT(dates[0],ut[0])[0]
+	utc1 = TT.ContUT(dates[-1],ut[1])[0]
+	use = np.where((futc >= utc0-2.0) & (futc <= utc1))[0]
+	print(files)
+	files = files[use]
+	filesp = filesp[use]
+	
+	return filesp,files

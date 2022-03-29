@@ -25,7 +25,7 @@ fitacf::fitacf(const char *fname, bool Verbose) {
 	/* count the number of records in the file */
 	_CountRecords();
 	if (Verbose) {
-		printf("Records: %d...",nRec_);
+		printf("Records: %d...\n",nRec_);
 	}
 
 	/* Read the scalars in */
@@ -76,12 +76,12 @@ void fitacf::_CountRecords() {
 	 * is a 32-bit integer denoting the size of that block */
 	long int FPos = 0;
 	int tmp;
-	n_ = 0;
+	nRec_ = 0;
 	rewind(F_);
 	while (FPos < FLen_) {
 		fseek(F_,FPos+4,SEEK_SET);
 		fread(&tmp,sizeof(int),1,F_);
-		n_++;
+		nRec_++;
 		FPos+=tmp;
 	}
 	rewind(F_);
@@ -290,27 +290,27 @@ void fitacf::_ReadRecordArrays(int I, int pos) {
 		 * within the case statment above to slightly improve speed) */
 		if (strcmp(strbuff,"v") == 0) {
 			for (j=0;j<scalars_[I].ArrLen;j++){
-				V[sp+j] = tmpflt[j];
+				arrays_[pos+j].V = tmpflt[j];
 				nread++;
 			}
 		} else if (strcmp(strbuff,"p_l") == 0)  {
 			for (j=0;j<scalars_[I].ArrLen;j++){
-				P_l[sp+j] = tmpflt[j];
+				arrays_[pos+j].P_l = tmpflt[j];
 				nread++;
 			}
 		} else if (strcmp(strbuff,"w_l") == 0)  {
 			for (j=0;j<scalars_[I].ArrLen;j++){
-				W_l[sp+j] = tmpflt[j];
+				arrays_[pos+j].W_l = tmpflt[j];
 				nread++;
 			}
 		} else if (strcmp(strbuff,"gflg") == 0)  {
 			for (j=0;j<scalars_[I].ArrLen;j++){
-				Gnd[sp+j] = tmpchar[j];
+				arrays_[pos+j].Gnd = tmpchar[j];
 				nread++;
 			}
 		} else if (strcmp(strbuff,"slist") == 0)  {
 			for (j=0;j<scalars_[I].ArrLen;j++){
-				Gate[sp+j] = tmpshrt[j];
+				arrays_[pos+j].Gate = tmpshrt[j];
 				nread++;
 			}
 		} 
@@ -325,7 +325,7 @@ void fitacf::_ReadRecordArrays(int I, int pos) {
 void fitacf::_GetTotalArrayLen() {
 	int i;
 	n_ = 0;
-	for (i=0;i<*nRec_;i++) {
+	for (i=0;i<nRec_;i++) {
 		if (scalars_[i].ArrLen == 0) {
 			n_++;
 		} else {
@@ -337,13 +337,13 @@ void fitacf::_GetTotalArrayLen() {
 int fitacf::_GetArrayLen(long int FileOffset, int na) {
 	
 	/* seek to the beginning of the arrays */
-	fseek(F,FileOffset,SEEK_SET);
+	fseek(F_,FileOffset,SEEK_SET);
 
 	/* string length */
 	int l;
 		
 	/* string buffers */
-	char strbuff[256], tmpstr[256]
+	char strbuff[256], tmpstr[256];
 	
 	/* character denoting the data type */
 	char dtype;
@@ -372,7 +372,7 @@ int fitacf::_GetArrayLen(long int FileOffset, int na) {
 	int i, j;
 	for (i=0;i<na;i++) {
 		/* get the name of the array */
-		_ReadString(F_,strbuff,&l);
+		_ReadString(strbuff,&l);
 		
 		/* read the datatype character */
 		fread(&dtype,sizeof(char),1,F_);
@@ -421,7 +421,7 @@ int fitacf::_GetArrayLen(long int FileOffset, int na) {
 				break;
 			default:
 				for (j=0;j<r;j++) {
-					ReadString(F_,tmpstr,&l);
+					_ReadString(tmpstr,&l);
 				}
 				
 		}
@@ -444,16 +444,16 @@ void fitacf::_ReadAllScalars() {
 	for (i=0;i<nRec_;i++) {
 		/* seek the correct position in the file at the start of the 
 		 * record */
-		fseek(F,p,SEEK_SET);
+		fseek(F_,p,SEEK_SET);
 		
 		/* read in the header */
-		_ReadRecordHeader(F,&magic,&size,&ns,&scalars_[i].na);
+		_ReadRecordHeader(&magic,&size,&ns,&scalars_[i].na);
 		
 		/* read some more scalars in */
 		_ReadRecordScalars(ns,i);
 		
 		/* We should be at the start of the arrays now, note the offset*/
-		scalars_[i].ArrOffset = ftell(F);
+		scalars_[i].ArrOffset = ftell(F_);
 		
 		/* get the number of array elements */
 		scalars_[i].ArrLen = _GetArrayLen(scalars_[i].ArrOffset,scalars_[i].na);
@@ -486,6 +486,7 @@ void fitacf::_ReadAllArrays() {
 				arrays_[p+j].nGates = scalars_[i].nGates;
 				arrays_[p+j].lagfr = scalars_[i].lagfr;
 				arrays_[p+j].smsep = scalars_[i].smsep;
+				arrays_[p+j].Index = i;
 			}
 			/* read the arrays in from the record */
 			_ReadRecordArrays(i,p);
@@ -500,11 +501,12 @@ void fitacf::_ReadAllArrays() {
 			arrays_[p].nGates = scalars_[i].nGates;
 			arrays_[p].lagfr = scalars_[i].lagfr;
 			arrays_[p].smsep = scalars_[i].smsep;
-			arrays_[p].V[p] = 	NAN;
-			arrays_[p].P_l[p] = NAN;
-			arrays_[p].W_l[p] = NAN;
-			arrays_[p].Gnd[p] = 0;
-			arrays_[p].Gate[p] = -1;		
+			arrays_[p].V = 	NAN;
+			arrays_[p].P_l = NAN;
+			arrays_[p].W_l = NAN;
+			arrays_[p].Gnd = 0;
+			arrays_[p].Gate = -1;	
+			arrays_[p].Index = i;	
 			p++;
 		}
 	}		
@@ -542,7 +544,7 @@ int fitacf::GetArrayLen() {
 void fitacf::GetArrays(	int *Date, float *ut, int *Beam, int *Channel,
 						int *ScanCode, int *nGates, int *smsep, 
 						int *lagfr, float *V, float *P_l, float *W_l,
-						int *Gnd, int *Gate) {
+						int *Gnd, int *Gate, int *Index) {
 	int i;
 	for (i=0;i<n_;i++) {
 		Date[i] = arrays_[i].Date;
@@ -558,6 +560,7 @@ void fitacf::GetArrays(	int *Date, float *ut, int *Beam, int *Channel,
 		W_l[i] = arrays_[i].W_l;
 		Gnd[i] = arrays_[i].Gnd;
 		Gate[i] = arrays_[i].Gate;
+		Index[i] = arrays_[i].Index;
 	}
 }
 

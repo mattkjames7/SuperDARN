@@ -37,6 +37,7 @@ typedef struct {
 	float W_l;
 	int Gnd;
 	int Gate;
+	int Index;
 } arrays;
 
 class fitacf {
@@ -56,7 +57,7 @@ class fitacf {
 		void GetArrays(	int *Date, float *ut, int *Beam, int *Channel,
 						int *ScanCode, int *nGates, int *smsep, 
 						int *lagfr, float *V, float *P_l, float *W_l,
-						int *Gnd, int *Gate);
+						int *Gnd, int *Gate, int *Index);
 
 	private:
 		/* file pointer */

@@ -19,7 +19,7 @@ int GetNewRandomNumber() {
 	int I;
 	while (done == false) {
 		I = rand();
-		if (hasMapKey(I,lt1Dinst) == false) {
+		if (hasMapKey(I,acfmap) == false) {
 			done = true;
 		}
 	}
@@ -41,7 +41,7 @@ bool CheckMapKey(int I) {
 
 
 
-int Loadfitacf(const char *fname, bool Verbose) {
+int LoadFitacf(const char *fname, bool Verbose) {
 	
 	/* get the random number */
 	int I = GetNewRandomNumber();
@@ -80,19 +80,19 @@ int GetArrayLen(int I) {
 	}
 }
 
-void GetArrays(int I, Date, float *ut, int *Beam, int *Channel,
+void GetArrays(int I, int *Date, float *ut, int *Beam, int *Channel,
 						int *ScanCode, int *nGates, int *smsep, 
 						int *lagfr, float *V, float *P_l, float *W_l,
-						int *Gnd, int *Gate) {
+						int *Gnd, int *Gate, int *Index) {
 
 	if (CheckMapKey(I)) {
 		acfmap[I]->GetArrays(Date,ut,Beam,Channel,ScanCode,nGates,smsep, 
-								lagfr,V,P_l,W_l,Gnd,Gate);
+								lagfr,V,P_l,W_l,Gnd,Gate,Index);
 	}
 
 }
 
-void Delfitacf(int I) {
+void DelFitacf(int I) {
 	std::map<int,fitacf*>::iterator it;
 	
 	if (CheckMapKey(I)) {
