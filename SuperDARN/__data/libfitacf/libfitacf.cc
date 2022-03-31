@@ -62,12 +62,12 @@ int GetScalarLen(int I) {
 
 void GetScalars(int I, int *Date, float *ut, int *Beam, int *Channel,
 						int *ScanCode, int *nGates, int *smsep, 
-						int *lagfr, int *ArrLen, int *RecLen, int *na, 
-						long int *ArrOffset) {
+						int *lagfr, int *rsep, int *frang, int *ArrLen, 
+						int *RecLen, int *na, long int *ArrOffset) {
 
 	if (CheckMapKey(I)) {
 		acfmap[I]->GetScalars(Date,ut,Beam,Channel,ScanCode,nGates,
-								smsep,lagfr,ArrLen,RecLen,na,ArrOffset);
+								smsep,lagfr,rsep,frang,ArrLen,RecLen,na,ArrOffset);
 	}
 
 }
@@ -82,12 +82,13 @@ int GetArrayLen(int I) {
 
 void GetArrays(int I, int *Date, float *ut, int *Beam, int *Channel,
 						int *ScanCode, int *nGates, int *smsep, 
-						int *lagfr, float *V, float *P_l, float *W_l,
-						int *Gnd, int *Gate, int *Index) {
+						int *lagfr, int *rsep, int *frang, float *V, 
+						float *P_l, float *W_l, int *Gnd, int *Gate, 
+						int *Index)  {
 
 	if (CheckMapKey(I)) {
 		acfmap[I]->GetArrays(Date,ut,Beam,Channel,ScanCode,nGates,smsep, 
-								lagfr,V,P_l,W_l,Gnd,Gate,Index);
+								lagfr,rsep,frang,V,P_l,W_l,Gnd,Gate,Index);
 	}
 
 }

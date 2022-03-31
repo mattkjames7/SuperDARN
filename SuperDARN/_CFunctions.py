@@ -29,6 +29,8 @@ _CGetScalars.argtypes = [	c_int,			#ID
 							c_int_ptr,		#nGates
 							c_int_ptr,		#smsep
 							c_int_ptr,		#lagfr
+							c_int_ptr,		#rsep
+							c_int_ptr,		#frang
 							c_int_ptr,		#ArrLen
 							c_int_ptr,		#RecLen
 							c_int_ptr,		#na
@@ -50,6 +52,8 @@ _CGetArrays.argtypes = [	c_int,			#ID
 							c_int_ptr,		#nGates
 							c_int_ptr,		#smsep
 							c_int_ptr,		#lagfr
+							c_int_ptr,		#rsep
+							c_int_ptr,		#frang
 							c_float_ptr,	#V
 							c_float_ptr,	#P_l
 							c_float_ptr,	#W_l

@@ -16,6 +16,8 @@ typedef struct	{
 	int nGates;
 	int smsep;	
 	int lagfr;
+	int frang;
+	int rsep;
 	int ArrLen;			/* the number of array elements */
 	int RecLen;			/* The length of the record in bytes */
 	int na;				/* the number of array variables */
@@ -32,6 +34,8 @@ typedef struct {
 	int nGates;
 	int lagfr;
 	int smsep;
+	int frang;
+	int rsep;
 	float V;
 	float P_l;
 	float W_l;
@@ -51,13 +55,14 @@ class fitacf {
 		int GetScalarLen();
 		void GetScalars(int *Date, float *ut, int *Beam, int *Channel,
 						int *ScanCode, int *nGates, int *smsep, 
-						int *lagfr, int *ArrLen, int *RecLen, int *na, 
-						long int *ArrOffset);
+						int *lagfr, int *rsep, int *frang, int *ArrLen, 
+						int *RecLen, int *na, long int *ArrOffset);
 		int GetArrayLen();
 		void GetArrays(	int *Date, float *ut, int *Beam, int *Channel,
 						int *ScanCode, int *nGates, int *smsep, 
-						int *lagfr, float *V, float *P_l, float *W_l,
-						int *Gnd, int *Gate, int *Index);
+						int *lagfr, int *rsep, int *frang, float *V, 
+						float *P_l, float *W_l, int *Gnd, int *Gate, 
+						int *Index);
 
 	private:
 		/* file pointer */

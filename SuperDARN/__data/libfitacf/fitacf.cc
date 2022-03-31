@@ -193,6 +193,10 @@ void fitacf::_ReadRecordScalars(int ns, int I) {
 			scalars_[I].Beam = tmpshrt;
 		} else if (strcmp(strbuff,"nrang") == 0) {
 			scalars_[I].nGates = tmpshrt;
+		} else if (strcmp(strbuff,"frang") == 0) {
+			scalars_[I].frang = tmpshrt;
+		} else if (strcmp(strbuff,"rsep") == 0) {
+			scalars_[I].rsep = tmpshrt;
 		}
 	}
 	/* set date and time */
@@ -486,6 +490,8 @@ void fitacf::_ReadAllArrays() {
 				arrays_[p+j].nGates = scalars_[i].nGates;
 				arrays_[p+j].lagfr = scalars_[i].lagfr;
 				arrays_[p+j].smsep = scalars_[i].smsep;
+				arrays_[p+j].frang = scalars_[i].frang;
+				arrays_[p+j].rsep = scalars_[i].rsep;
 				arrays_[p+j].Index = i;
 			}
 			/* read the arrays in from the record */
@@ -501,6 +507,8 @@ void fitacf::_ReadAllArrays() {
 			arrays_[p].nGates = scalars_[i].nGates;
 			arrays_[p].lagfr = scalars_[i].lagfr;
 			arrays_[p].smsep = scalars_[i].smsep;
+			arrays_[p].frang = scalars_[i].frang;
+			arrays_[p].rsep = scalars_[i].rsep;
 			arrays_[p].V = 	NAN;
 			arrays_[p].P_l = NAN;
 			arrays_[p].W_l = NAN;
@@ -518,8 +526,8 @@ int fitacf::GetScalarLen() {
 
 void fitacf::GetScalars(int *Date, float *ut, int *Beam, int *Channel,
 						int *ScanCode, int *nGates, int *smsep, 
-						int *lagfr, int *ArrLen, int *RecLen, int *na, 
-						long int *ArrOffset) {
+						int *lagfr, int *rsep, int *frang, int *ArrLen, 
+						int *RecLen, int *na, long int *ArrOffset) {
 	int i;
 	for (i=0;i<nRec_;i++) {
 		Date[i] = scalars_[i].Date;
@@ -530,6 +538,8 @@ void fitacf::GetScalars(int *Date, float *ut, int *Beam, int *Channel,
 		nGates[i] = scalars_[i].nGates;
 		smsep[i] = scalars_[i].smsep;
 		lagfr[i] = scalars_[i].lagfr;
+		rsep[i] = scalars_[i].rsep;
+		frang[i] = scalars_[i].frang;
 		ArrLen[i] = scalars_[i].ArrLen;
 		RecLen[i] = scalars_[i].RecLen;
 		na[i] = scalars_[i].na;
@@ -543,8 +553,9 @@ int fitacf::GetArrayLen() {
 
 void fitacf::GetArrays(	int *Date, float *ut, int *Beam, int *Channel,
 						int *ScanCode, int *nGates, int *smsep, 
-						int *lagfr, float *V, float *P_l, float *W_l,
-						int *Gnd, int *Gate, int *Index) {
+						int *lagfr, int *rsep, int *frang, float *V, 
+						float *P_l, float *W_l, int *Gnd, int *Gate, 
+						int *Index) {
 	int i;
 	for (i=0;i<n_;i++) {
 		Date[i] = arrays_[i].Date;
@@ -555,6 +566,8 @@ void fitacf::GetArrays(	int *Date, float *ut, int *Beam, int *Channel,
 		nGates[i] = arrays_[i].nGates;
 		smsep[i] = arrays_[i].smsep;
 		lagfr[i] = arrays_[i].lagfr;
+		rsep[i] = arrays_[i].rsep;
+		frang[i] = arrays_[i].frang;
 		V[i] = arrays_[i].V;
 		P_l[i] = arrays_[i].P_l;
 		W_l[i] = arrays_[i].W_l;

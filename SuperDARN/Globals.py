@@ -35,6 +35,8 @@ sdtype = [	('Date','int32'),			#Date in format yyyymmdd
 			('nGates','int32'),			#number of range gates
 			('smsep','int32'),			#sample separation in microseconds
 			('lagfr','int32'),			#lag in microseconds to first range
+			('rsep','int32'),			#sample separation in km
+			('frang','int32'),			#km to first range
 			('ArrLen','int32'),			#length of arrays stored in this record
 			('RecLen','int32'),			#record length in bytes
 			('na','int32'),				#the number of array variablesin the record
@@ -48,6 +50,8 @@ adtype = [	('Date','int32'),			#Date in format yyyymmdd
 			('nGates','int32'),			#number of gates
 			('smsep','int32'),			#sample separation in microseconds
 			('lagfr','int32'),			#lag to first range in microseconds
+			('rsep','int32'),			#sample separation in km
+			('frang','int32'),			#distance to first range in km
 			('V','float32'),			#velocity
 			('P_l','float32'),			#power from lambda fit
 			('W_l','float32'),			#lambda spectral width

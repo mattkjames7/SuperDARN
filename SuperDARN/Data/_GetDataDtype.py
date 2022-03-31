@@ -12,6 +12,8 @@ def _GetDataDtype(nB,nG):
 				('nGates','int32'),			#number of gates
 				('smsep','int32'),			#sample separation in microseconds
 				('lagfr','int32'),			#lag to first range in microseconds
+				('rsep','int32'),			#sample separation in km
+				('frang','int32'),			#km to first range
 				('V','float32',(nB,nG)),	#velocity
 				('P_l','float32',(nB,nG)),	#power from lambda fit
 				('W_l','float32',(nB,nG)),	#lambda spectral width
@@ -30,6 +32,8 @@ def _GetBeamDtype(nG):
 				('nGates','int32'),			#number of gates
 				('smsep','int32'),			#sample separation in microseconds
 				('lagfr','int32'),			#lag to first range in microseconds
+				('rsep','int32'),			#sample separation in km
+				('frang','int32'),			#km to first range
 				('V','float32',(nG,)),		#velocity
 				('P_l','float32',(nG,)),	#power from lambda fit
 				('W_l','float32',(nG,)),	#lambda spectral width

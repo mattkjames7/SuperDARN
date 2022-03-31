@@ -2,7 +2,7 @@ import numpy as np
 from .. import Globals
 import os
 from ..Tools.FileSearch import FileSearch
-from datetime import date
+from ..Tools.Today import Today
 from ._ListHDW import _ListHDW
 import DateTimeTools as TT
 
@@ -39,7 +39,7 @@ def _CheckHardware():
 			l = f.readline()
 			f.close()
 			udate = np.int32(l)
-			cdate = np.int32(date.today().strftime('%Y%m%d'))
+			cdate = Today()
 			d = TT.DateDifference(udate,cdate)
 			if d > 180:
 				update = True

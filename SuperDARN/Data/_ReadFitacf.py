@@ -51,10 +51,10 @@ def _ReadFitacf(fname,Verbose=False):
 	#return the data
 	_CGetScalars(ID,sc['Date'],sc['ut'],sc['Beam'],sc['Channel'],
 				sc['ScanCode'],sc['nGates'],sc['smsep'],sc['lagfr'],
-				sc['ArrLen'],sc['RecLen'],sc['na'],sc['ArrOffset'])
+				sc['rsep'],sc['frang'],sc['ArrLen'],sc['RecLen'],sc['na'],sc['ArrOffset'])
 				
 	_CGetArrays(ID,ar['Date'],ar['ut'],ar['Beam'],ar['Channel'],
-				ar['ScanCode'],ar['nGates'],ar['smsep'],ar['lagfr'],
+				ar['ScanCode'],ar['nGates'],ar['smsep'],ar['lagfr'],ar['rsep'],ar['frang'],
 				ar['V'],ar['P_l'],ar['W_l'],ar['Gnd'],ar['Gate'],ar['Index'])
 
 	#delete the objects
