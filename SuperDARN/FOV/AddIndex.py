@@ -1,6 +1,7 @@
 import numpy as np
 from .. import Globals
 from .ReadIndex import ReadIndex
+import PyFileIO as pf
 
 def AddIndex(Radar,Date,frang,rsep,Model,fname):
 	'''
@@ -9,7 +10,7 @@ def AddIndex(Radar,Date,frang,rsep,Model,fname):
 	'''
 
 	#read current index
-	idx = ReadFOVIndex()
+	idx = ReadIndex()
 	
 	#check if it currently exists
 	if fname in idx.fname:

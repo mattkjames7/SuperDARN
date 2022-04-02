@@ -58,7 +58,7 @@ def GetBeamData(Radar,Date,ut,Beam):
 	ind = np.zeros(data.size,dtype='int32')
 	I = data.Index[0]
 	p = 0
-	print(sc.size,np.unique(data.Index).size)
+
 	for i in range(0,data.size):
 		if I != data.Index[i]:
 			p += 1

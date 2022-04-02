@@ -50,7 +50,7 @@ def _ReadHDW(fname):
 				d = data[i][j]
 			if 'int' in str(out[fields[j]].dtype) and '.' in d:
 				d = d.split('.')[0]
-			out[fields[j]] = np.array(d).astype(out[fields[j]].dtype)
+			out[fields[j]][i] = np.array(d).astype(out[fields[j]].dtype)
 	
 
 	

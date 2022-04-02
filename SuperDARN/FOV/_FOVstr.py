@@ -13,7 +13,7 @@ def _FOVstr(Radar,Date,frang=180.0,rsep=45.0,Model='chisham08'):
 		m = 'c'
 	else:
 		m = 'o'
-	print(Radar.lower(),Date,frang,rsep,m)
+
 	fstr = '{:s}-{:08d}-{:06.1f}-{:05.1f}-{:s}'.format(Radar.lower(),Date,frang,rsep,m)
 	
 	return fstr

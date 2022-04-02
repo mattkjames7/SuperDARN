@@ -4,6 +4,8 @@ from ._FOVstr import _FOVstr
 from .CheckIndex import CheckIndex
 import PyFileIO as pf
 from .RadarFOV import RadarFOV
+import os
+from .AddIndex import AddIndex
 
 def SaveFOV(Radar,Date,frang=180.0,rsep=45.0,
 				Altitude=400.0,Model='chisham08'):
@@ -26,11 +28,14 @@ def SaveFOV(Radar,Date,frang=180.0,rsep=45.0,
 		Virtual height model: 'chisham08'|'old'	
 	'''
 	#get the file name
-	s = _FOVstr(Radar,Date,frang,rsep,Model)
-	fname = s + '.bin'
+#	s = _FOVstr(Radar,Date,frang,rsep,Model)
+#	fname = s + '.bin'
+	
+	if not os.path.isdir(Globals.FOVPath):
+		os.system('mkdir -pv '+Globals.FOVPath)
 	
 	#check the index file
-	inidx = CheckIndex(Radar,Date,frang,rsep,Model)
+	inidx,fname = CheckIndex(Radar,Date,frang,rsep,Model)
 	
 	#get the fov!
 	fov = RadarFOV(Radar,Date,frang,rsep,Altitude,Model)
