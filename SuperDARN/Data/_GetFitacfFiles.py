@@ -92,7 +92,7 @@ def _GetFitacfFiles(Radar,Date,ut):
 	utc0 = TT.ContUT(dates[0],ut[0])[0]
 	utc1 = TT.ContUT(dates[-1],ut[1])[0]
 	use = np.where((futc >= utc0-2.0) & (futc <= utc1))[0]
-	print(files)
+
 	files = files[use]
 	filesp = filesp[use]
 	

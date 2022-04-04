@@ -23,15 +23,15 @@ def _DownloadHDW():
 	os.system('wget ' + gitadr + ' -O '+hwpath+'rst.zip')
 	
 	#unzip it
-	os.system('unzip '+hwpath+'rst.zip -d '+hwpath)
+	os.system('unzip -q '+hwpath+'rst.zip -d '+hwpath)
 	
 	#copy the files we need
-	os.system('cp -vr '+hwpath+'rst-master/tables/superdarn/hdw '+hwpath)
-	os.system('cp -v '+hwpath+'rst-master/tables/superdarn/radar.dat '+hwpath)
+	os.system('cp -r '+hwpath+'rst-master/tables/superdarn/hdw '+hwpath)
+	os.system('cp '+hwpath+'rst-master/tables/superdarn/radar.dat '+hwpath)
 
 	#remove the other stuff
-	os.system('rm -vfr '+hwpath+'rst-master/')
-	os.system('rm -v '+hwpath+'rst.zip')
+	os.system('rm -fr '+hwpath+'rst-master/')
+	os.system('rm '+hwpath+'rst.zip')
 
 	#check if it worked
 	success,_ = _CheckHardware()

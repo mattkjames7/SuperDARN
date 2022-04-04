@@ -207,7 +207,7 @@ def RTI(Radar,Date,ut,Beams,Gates,Param='V',fig=None,maps=[1,1,0,0],
 	TT.DTPlotLabel(ax)
 
 	if not nobar:
-		sm = plt.cm.ScalarMappable(cmap=cmap,norm=plt.Normalize(vmin=scale[0],vmax=scale[1]))
+		sm = plt.cm.ScalarMappable(cmap=cmap,norm=norm)
 		sm._A = []
 		cbar=fig.colorbar(sm)
 		cbar.set_label(ztitle)		

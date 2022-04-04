@@ -101,31 +101,6 @@ def FOVData(Radar,Date,ut,Param='V',fig=None,maps=[1,1,0,0],
 	grid = np.zeros((hw.nBeams,hw.nGates),dtype='float64') + np.nan
 	gridgs = np.zeros((hw.nBeams,hw.nGates),dtype='float64') + np.nan
 	for i in range(0,hw.nBeams):
-		# try:
-			# #get the data parameter to be plotted and ground scatter
-			# P = data[i][Param][0]
-			# G = data[i]['Gnd'][0].astype('float64')
-			# G[G <= 0] = np.nan
-			
-			# #remove ground scatter data
-			# if Param != 'Gnd' and ShowScatter == False:
-				# gs = np.where((G > 0) & np.isfinite(G))[0]
-				# P[gs] = np.nan			
-
-			# if not Param == 'Gnd':
-				# #remove huge values
-				# if not MaxVal is None:
-					# bad = np.where(P > MaxVal)[0]
-					# if bad.size > 0:
-						# P[bad] = np.nan		
-			# #add to the grids
-			# grid[i]	= P
-			# gridgs[i] = G
-			
-		#except:
-		#	grid[i,:] = np.nan
-		#	gridgs[i,:] = np.nan
-
 		#get the data parameter to be plotted and ground scatter
 		P = data[i][Param][0]
 		G = data[i]['Gnd'][0].astype('float64')

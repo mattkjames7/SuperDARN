@@ -343,18 +343,18 @@ class FOVObj(object):
 			
 
 		#create the axes
-		if fig is None:
+		if fig is None or hasattr(fig,'Axes'):
 
 			if Cart:
 				xrnge = [t.min()-5,t.max()+5]
 				yrnge = [r.min()-5,r.max()+5]
-				ax = CartPolarAxis(maps=maps,xrnge=xrnge,yrnge=yrnge,ShowLatLines=ShowLatLines,
+				ax = CartPolarAxis(fig=fig,maps=maps,xrnge=xrnge,yrnge=yrnge,ShowLatLines=ShowLatLines,
 								ShowLonLines=ShowLonLines,Background=Background)
 
 				CartPolarCoasts(ax,Date=Date,ut=ut,Lon=Lon,Hemisphere=hem,Mag=Mag,
 							Fill=Continents,Method=Method,color=Coasts)
 			else:			
-				ax = PolarAxis(maps=maps,eqlat=eqlat,ShowLatLines=ShowLatLines,
+				ax = PolarAxis(fig=fig,maps=maps,eqlat=eqlat,ShowLatLines=ShowLatLines,
 								ShowLonLines=ShowLonLines,Background=Background)
 
 				PolarCoasts(ax,Date=Date,ut=ut,Lon=Lon,Hemisphere=hem,Mag=Mag,
@@ -478,7 +478,7 @@ class FOVObj(object):
 			hem = 'south'
 
 		#get the FOV
-		lon,lat = self.GetFOV(Mag=Mag,GS=GS,Date=Date)
+		lon,lat = self.GetFOV(Mag=False,GS=GS,Date=Date)
 		
 		if Cart:
 			#convert to the appropriate coordinate system
@@ -525,7 +525,7 @@ class FOVObj(object):
 			
 			rp = [r00,r10,r11,r01,r00]
 			tp = [t00,t10,t11,t01,t00]
-			
+
 			ax.plot(tp,rp,color=color,linewidth=linewidth)
 			
 		return ax

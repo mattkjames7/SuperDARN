@@ -31,9 +31,6 @@ def _ReadFitacfFiles(Radar,Date,ut=[0.0,24.0]):
 	
 	#get the list of file names
 	filesp,files = _GetFitacfFiles(Radar,Date,ut)
-	print('cat')
-	print(files)
-	print(filesp)
 	
 	#concatenate the files
 	tpath,tfile = _CatFitacfFiles(filesp,files)

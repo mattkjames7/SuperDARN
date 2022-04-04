@@ -38,7 +38,9 @@ def SaveFOV(Radar,Date,frang=180.0,rsep=45.0,
 #	fname = s + '.bin'
 	
 	if not os.path.isdir(Globals.FOVPath):
+		print()
 		os.system('mkdir -pv '+Globals.FOVPath)
+		
 	
 	#check the index file
 	inidx,fname = CheckIndex(Radar,Date,frang,rsep,Model)
