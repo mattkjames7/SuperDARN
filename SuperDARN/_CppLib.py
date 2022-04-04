@@ -93,6 +93,7 @@ def _CompileSource():
 
 		CWD = os.getcwd()
 		os.chdir(os.path.dirname(__file__)+"/__data/libfitacf/")
+		os.system('pwd')
 		os.system(sudo+'make')
 		os.chdir(CWD)
 	elif(os.name=='nt'):
