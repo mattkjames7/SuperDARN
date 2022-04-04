@@ -11,6 +11,21 @@ def _ReadFitacfFiles(Radar,Date,ut=[0.0,24.0]):
 	Find the appropriate fitacf files for a radar between a set of
 	dates and times, then read them in.
 	
+	Inputs
+	======
+	Radar : str
+		Radar code
+	Date : int
+		Date in format yyyymmdd (can be one or two elements)
+	ut : float
+		UT range in hours since the start of the day (2 elements)
+	
+	Returns
+	=======
+	sc : numpy.recarray
+		Scalars from the beginning of each fitacf record
+	ar : numpy.recarray
+		Contents of all records.
 	
 	'''
 	

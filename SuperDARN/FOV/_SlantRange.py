@@ -3,7 +3,8 @@ import numpy as np
 
 def _SlantRange(frang,rsep,rxrise,nGates):
 	'''
-	Calculate the slant range
+	Calculate the slant range for each range gate based on the lag to
+	the first range and the range separation.
 	
 	Inputs
 	======
@@ -51,6 +52,8 @@ def _SlantRangeGS(srange,altitude=300.0):
 	Use equation defined by Bristow et al 1994 to work out the 
 	approximate distance of the reflection point in the ionosphere
 	for groundscatter.
+	
+	(see page 324 of https://doi.org/10.1029/93JA01470)
 	
 	Inputs
 	======

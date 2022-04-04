@@ -5,7 +5,7 @@ from .. import Globals
 
 def MemUsage():
 	'''
-	Calcualte the approximate memory usage in MB due to loading fitacf
+	Calculate the approximate memory usage in MB due to loading fitacf
 	data.
 	
 	Returns

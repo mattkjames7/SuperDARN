@@ -6,6 +6,20 @@ def CheckIndex(Radar,Date,frang=180.0,rsep=45.0,Model='chisham08'):
 	'''
 	Check whether a radar config already exists in the index.
 	
+	Inputs
+	======
+	======
+	Radar : str
+		Radar code
+	Date : int
+		Date in format yyyymmdd 	
+	frang : float
+		Distance to first range (km)
+	rsep : float
+		Range separation
+	Model : str
+		Virtual height model: 'chisham08'|'old'	
+			
 	Returns
 	=======
 	exists : bool

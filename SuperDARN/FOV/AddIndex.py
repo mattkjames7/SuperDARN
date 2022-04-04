@@ -6,6 +6,22 @@ import PyFileIO as pf
 def AddIndex(Radar,Date,frang,rsep,Model,fname):
 	'''
 	Add FOV to the index file
+
+	Inputs
+	======
+	Radar : str
+		Radar code
+	Date : int
+		Date in format yyyymmdd 	
+	frang : float
+		Distance to first range (km)
+	rsep : float
+		Range separation
+	Altitude : float
+		Altitude for old virtual height model
+	Model : str
+		Virtual height model: 'chisham08'|'old'	
+		
 	
 	'''
 

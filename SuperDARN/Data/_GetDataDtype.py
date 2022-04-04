@@ -2,7 +2,10 @@ import numpy as np
 
 
 def _GetDataDtype(nB,nG):
+	'''
+	This is not used.
 	
+	'''
 	
 	dtype = [	('Date','int32'),			#Date in format yyyymmdd
 				('ut','float32'),			#UT hours
@@ -22,8 +25,21 @@ def _GetDataDtype(nB,nG):
 	return dtype
 
 def _GetBeamDtype(nG):
+	'''
+	This is used to define the numpy.recarray dtype, where the number
+	of range gates may differ from one radar to another.
 	
+	Inputs
+	======
+	nG : int
+		Total number of range gates.
+		
+	Returns
+	=======
+	dtype : list
+		list of dtype tuples for defining the numpy.recarray
 	
+	'''
 	dtype = [	('Date','int32'),			#Date in format yyyymmdd
 				('ut','float32'),			#UT hours
 				('Channel','int32'),		#channel id

@@ -11,6 +11,14 @@ def _CheckHardware():
 	Check if we have the hardware files/radar.dat. If we do, then check 
 	when we last updated them.
 	
+	Returns
+	=======
+	exists : bool
+		True if the files exist
+	update : bool
+		True if the files have been there for a while without checking
+		for updates.
+	
 	'''
 	
 	#check for the hw directory

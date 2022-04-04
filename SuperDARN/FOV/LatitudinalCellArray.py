@@ -2,7 +2,39 @@ import numpy as np
 from .GetFOV import GetFOV
 
 def LatitudinalCellArray(Radar,Lon,dLon=0.4,Date=None,Mag=True,LatRange=None):
+	'''
+	Get a list of radar cells which approximately follow a line of
+	constant longitude.
 	
+	Inputs
+	======
+	Radar : str
+		Radar code
+	Lon : float
+		Desired longitude (degrees)
+	dLon : float
+		Acceptable longitude deviation of centre of the cell from Lon
+		(degrees)
+	Date : int
+		Date in the format yyyymmdd - if None then today's date is used.
+	Mag : bool
+		If True (default) then magnetic coordinates are used, geographic
+		otherwise.
+	LatRange : float
+		2 element array indicating the minimum and maximum latitudes
+		to use.
+		
+	Returns
+	=======
+	beams : int
+		Array of beam numbers
+	gates : int
+		Array of range gates
+	lats : float
+		Array of latitudes (magnetic if Mag=True)
+	
+	'''
+		
 	
 	#get the fov
 	fov = GetFOV(Radar,Date=Date)

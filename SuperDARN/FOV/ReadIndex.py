@@ -5,7 +5,8 @@ import os
 
 def ReadIndex():
 	'''
-	Read the index file
+	Read the index file for the fields of view stored in 
+	$SUPERDARN_PATH/FOV
 	
 	Returns
 	=======

@@ -10,7 +10,10 @@ https://en.wikipedia.org/wiki/Great-circle_navigation
 
 def _RangeCoords(rlon,rlat,rang,bs):
 	'''
-	Work out the geographic coordinates of a range beam.
+	Work out the geographic coordinates of a range beam based on the
+	radar position, boresight and ground ranges. The equations used to 
+	work this out come from the "Finding way-points" section of:
+	https://en.wikipedia.org/wiki/Great-circle_navigation
 	
 	Inputs
 	======

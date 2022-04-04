@@ -6,6 +6,12 @@ def _CatFitacfFiles(filesp,files):
 	'''
 	Concatenate Fit ACF files into a single temporary file.
 	
+	Inputs
+	======
+	filesp : str
+		Array of files including their paths
+	files : str
+		Array of file names without their paths.	
 	'''
 	
 	#start by copying and unzipping individual files into a temp directory

@@ -14,6 +14,30 @@ from ._MagFOV import _MagFOV
 
 class FOVObj(object):
 	def __init__(self,Radar,Date,frang=180.0,rsep=45.0,Altitude=400.0,Model='Chisham08'):
+		'''
+		Object containing the geographic coordinates of each cell and a 
+		few basic functions which can return/plot the FOV in geographic
+		and	magnetic coordinates.		
+		
+		
+		Inputs
+		======
+		Radar : str
+			Radar code
+		Date : int
+			Date in format yyyymmdd
+		frang : float
+			Distance to the first range (km)
+		rsep : float
+			range separation (km)
+		Altitude : float
+			Maximum virtual height (only used if Model='old')
+		Model : str
+			Virtual height model: 'chisham08'|'old'
+		
+
+		
+		'''
 		
 		#store stuff
 		self.Radar = Radar
@@ -123,13 +147,71 @@ class FOVObj(object):
 		return lon,lat
 
 	def CellCoords(self,Beams,Gates,Date=None,ut=None,Mag=False,GS=False):
+		'''
+		Use this function to return the geographic or magnetic 
+		coordinates of the centres of the FOV cells.
 		
+		Inputs
+		======
+		Beams : int
+			Array of beam numbers
+		Gates : int
+			Array of gate numbers
+		Date : int
+			Date in the format yyyymmdd
+		ut : float 
+			UT in hours since start of the day
+		Mag : bool
+			Use magnetic coordinates if True, geographic otherwise.
+		GS : bool
+			If True, the ground ranges corresponding to the ionospheric
+			reflection points of the ground scatter are returned.
+			
+		Returns
+		=======
+		lon : float
+			Longitude (degrees)
+		lat : float
+			Latitude (degrees)
+		
+		'''
 		lon,lat = self.GetFOV(Center=True,Mag=Mag,GS=GS,Date=Date)
 		
 		return lon[Beams,Gates],lat[Beams,Gates]
 		
 
 	def CellCorners(self,Beams,Gates,Date=None,ut=None,Mag=False,GS=False):
+		'''
+		Use this function to return the geographic or magnetic 
+		coordinates of the ccorners of the FOV cells.
+		
+		Inputs
+		======
+		Beams : int
+			Array of beam numbers
+		Gates : int
+			Array of gate numbers
+		Date : int
+			Date in the format yyyymmdd
+		ut : float 
+			UT in hours since start of the day
+		Mag : bool
+			Use magnetic coordinates if True, geographic otherwise.
+		GS : bool
+			If True, the ground ranges corresponding to the ionospheric
+			reflection points of the ground scatter are returned.
+			
+		Returns
+		=======
+		lon : float
+			Longitude (degrees)
+		lat : float
+			Latitude (degrees)
+		
+		Each of the outputs is a list of 4-element arrays for each cell.
+		
+		'''
+
 		
 		lon,lat = self.GetFOV(Center=False,Mag=Mag,GS=GS,Date=Date)
 		
@@ -156,6 +238,78 @@ class FOVObj(object):
 					eqlat=45.0,ShowLatLines=True,ShowLonLines=True,
 					Background=None,Continents=None,Coasts='black',
 					Lon=False,Method='aacgm',Cart=True):
+		'''
+		Create a polar plot with this FOV
+		
+		Too many keywords- will rewrite soon to use **kwargs
+		
+		Inputs
+		======
+		Beams : None|int
+			If None - all beams are returned
+			If 2 element array-like - beams from Beams[0] to Beams[1]
+			are returned
+		Gates : None|int
+			If None - all Gates are returned
+			If 2 element array-like - Gates from Gates[0] to Gates[1]
+			are returned
+		color : str|float
+			Color to plot the FOV in.
+		linewidth : float
+			Width of the line to use when plotting FOV
+		ShowBeams : bool
+			If True, then each beam is plotted
+		ShowCells : bool
+			If True then all range cells are plotted
+		Mag : bool
+			If True, magnetic coordinates are calculated (provide a date 
+			for the mode accurate conversion).
+		GS : bool
+			The ground scatter model will be provided if this is True.
+		Date : int
+			Date in the format yyyymmdd		
+		ut : float
+			UT in hours since the start of the day
+		fig : None|pyplot|pyplot.Axes
+			None : new plot will be created with a new subplot
+			pyplot : current figure to be used, new subplot
+			pyplot.Axes : current axes instance with be used
+		maps : int
+			4-element array defining the subplot position 
+			[xmaps,ymaps,xmap,ymap] where:
+				xmaps - total number of subplots horizontally
+				ymaps - total number of subplots vertically
+				xmap - position from left (starting at 0)
+				ymap - position from top (starting at 0)
+		ShowLatLines : bool
+			Show lines of latitude every 10 degrees
+		ShowLonLines : bool
+			Show the lines of longitude/local time every 15 degrees
+		Background : float
+			3 or 4 element array providing a background color.
+		Continents : None|str|float
+			Color to fill continents in with
+		Coasts : float|str
+			Color of the coast lines.
+		eqlat : float
+			Minimum latitude to plot (only used if Cart=False)
+		Lon : bool
+			If True, then the azimuthal coordinates of the plot will be
+			longitudes, otherwise they are local times.
+		Method : str
+			'aacgm'|'igrf'. use aacgm
+		Cart : bool
+			If True, the plot is not actually a polar projection plot, 
+			it can be plotted to and treated exactly as an ordinary
+			Cartesian plot.
+			If False, then a polar projection plot is used.
+		
+		Returns
+		=======
+		ax : matplotlib.pyplot.Axes 
+			instance of the current set of axes used.
+		'''
+
 
 		from ..Plot.PolarAxis import PolarAxis
 		from ..Plot.PolarCoasts import PolarCoasts
@@ -233,6 +387,78 @@ class FOVObj(object):
 					eqlat=45.0,ShowLatLines=True,ShowLonLines=True,
 					Background=None,Continents=None,Coasts='black',
 					Lon=False,Method='aacgm',Cart=True):
+
+		'''
+		Create a polar plot with a few cells from this FOV
+		
+		Too many keywords- will rewrite soon to use **kwargs
+		
+		Inputs
+		======
+		Beams : None|int
+			If None - all beams are returned
+			If 2 element array-like - beams from Beams[0] to Beams[1]
+			are returned
+		Gates : None|int
+			If None - all Gates are returned
+			If 2 element array-like - Gates from Gates[0] to Gates[1]
+			are returned
+		color : str|float
+			Color to plot the FOV in.
+		linewidth : float
+			Width of the line to use when plotting FOV
+		ShowBeams : bool
+			If True, then each beam is plotted
+		ShowCells : bool
+			If True then all range cells are plotted
+		Mag : bool
+			If True, magnetic coordinates are calculated (provide a date 
+			for the mode accurate conversion).
+		GS : bool
+			The ground scatter model will be provided if this is True.
+		Date : int
+			Date in the format yyyymmdd		
+		ut : float
+			UT in hours since the start of the day
+		fig : None|pyplot|pyplot.Axes
+			None : new plot will be created with a new subplot
+			pyplot : current figure to be used, new subplot
+			pyplot.Axes : current axes instance with be used
+		maps : int
+			4-element array defining the subplot position 
+			[xmaps,ymaps,xmap,ymap] where:
+				xmaps - total number of subplots horizontally
+				ymaps - total number of subplots vertically
+				xmap - position from left (starting at 0)
+				ymap - position from top (starting at 0)
+		ShowLatLines : bool
+			Show lines of latitude every 10 degrees
+		ShowLonLines : bool
+			Show the lines of longitude/local time every 15 degrees
+		Background : float
+			3 or 4 element array providing a background color.
+		Continents : None|str|float
+			Color to fill continents in with
+		Coasts : float|str
+			Color of the coast lines.
+		eqlat : float
+			Minimum latitude to plot (only used if Cart=False)
+		Lon : bool
+			If True, then the azimuthal coordinates of the plot will be
+			longitudes, otherwise they are local times.
+		Method : str
+			'aacgm'|'igrf'. use aacgm
+		Cart : bool
+			If True, the plot is not actually a polar projection plot, 
+			it can be plotted to and treated exactly as an ordinary
+			Cartesian plot.
+			If False, then a polar projection plot is used.
+		
+		Returns
+		=======
+		ax : matplotlib.pyplot.Axes 
+			instance of the current set of axes used.
+		'''
 
 		from ..Plot.PolarAxis import PolarAxis
 		from ..Plot.PolarCoasts import PolarCoasts

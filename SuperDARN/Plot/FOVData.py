@@ -14,6 +14,77 @@ def FOVData(Radar,Date,ut,Param='V',fig=None,maps=[1,1,0,0],
 		Background=None,Continents=None,Coasts='black',
 		Lon=False,Method='aacgm',color='black'):
 
+	'''
+	Plot the data froma  given time and date within the field of view of
+	a radar.
+	
+	Inputs
+	======
+	Radar : str
+		Radar code
+	Date : int
+		Date in format yyyymmdd (can be a 2-element range)
+	ut : float
+		UT range in hours since the start of the day.
+	Param : str
+		Which of the followinf parameters to plot
+		'V' :velocity
+		'P_l' : Power
+		'W_l' : width
+		'Gnd' : ground scatter
+	fig : None|pyplot|pyplot.Axes
+		If None: a new plot is created
+		if an instance pf matplotlib.pyplot is provided, the current
+		figure is used, with a new subplot
+		if an instance of pyplot.Axes is provided, then the current 
+		subplot is to be plotted upon.
+	maps : int
+		4-element array defining the subplot position 
+		[xmaps,ymaps,xmap,ymap] where:
+			xmaps - total number of subplots horizontally
+			ymaps - total number of subplots vertically
+			xmap - position from left (starting at 0)
+			ymap - position from top (starting at 0)
+	zlog : bool
+		If True then the color scale will be logarithmic
+	scale : float
+		2-element array defining the color scale range
+	cmap : None|str
+		color map to use
+	nobar : bool
+		If true, then no color bar will be plotted
+	MaxVal : float
+		Maximum data value, above which will be assumed to be erroneous.
+	ShowScatter : bool
+		If True then ground scatter will appear in color instead of grey
+	color : str|float
+		Color to plot the FOV in.
+
+	Mag : bool
+		If True, magnetic coordinates are calculated (provide a date 
+		for the mode accurate conversion).
+	GS : bool
+		The ground scatter model will be provided if this is True.
+
+	Continents : None|str|float
+		Color to fill continents in with
+	Coasts : float|str
+		Color of the coast lines.
+	Lon : bool
+		If True, then the azimuthal coordinates of the plot will be
+		longitudes, otherwise they are local times.
+	Method : str
+		'aacgm'|'igrf'. use aacgm
+	Background : float
+		3 or 4 element array providing a background color.
+		
+	Returns
+	=======
+	ax : pyplot.Axes
+		axes of a plot	
+	
+	'''
+
 
 	#get the FOV
 	date0 = np.array([Date]).flatten()[0]

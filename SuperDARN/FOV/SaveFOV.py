@@ -12,6 +12,10 @@ def SaveFOV(Radar,Date,frang=180.0,rsep=45.0,
 	'''
 	Save a field of view
 	
+	A file with a name based on all of the following input parameters
+	will be created in $SUPERDARN_PATH/FOV/ which will be used in other
+	functions.
+	
 	Inputs
 	======
 	Radar : str
@@ -26,6 +30,8 @@ def SaveFOV(Radar,Date,frang=180.0,rsep=45.0,
 		Altitude for old virtual height model
 	Model : str
 		Virtual height model: 'chisham08'|'old'	
+		
+	
 	'''
 	#get the file name
 #	s = _FOVstr(Radar,Date,frang,rsep,Model)

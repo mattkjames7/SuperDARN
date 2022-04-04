@@ -6,7 +6,9 @@ from .GetFOV import GetFOV
 
 def PopulateFOV():
 	'''
-	Load all of the default fields of view into memory.
+	Load all of the default fields of view into memory. If any of them
+	don't exists yet, then this will attempt to calculate them and save
+	them in $SUPERDARN_PATH/FOV/
 	
 	'''
 	#get a list of the radars

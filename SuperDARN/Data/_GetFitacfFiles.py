@@ -5,6 +5,41 @@ import DateTimeTools as TT
 
 def _GetFitacfFiles(Radar,Date,ut):
 	
+	'''
+	Scans the fitacf path for files which fit within the requested
+	time/date range.
+	
+	This should work with file names with the format:
+	$FITACF_PATH/stn/yyyy/yyyymmhh.hhmm.00.stn.fitacf.bz2
+	where 
+		stn : 3-letter radar code (lower case)
+		yyyy : year folder
+		yyyymmdd : Date
+		hhmm : time (hours and minutes) 
+	e.g.
+	$FITACF_PATH/han/2002/20020321.2001.00.han.fitacf.bz2
+	
+	Our files are stored in two hour blocks, other configs may do 
+	strange things - so file a bug report!
+	
+	Inputs
+	======
+	Radar : str
+		Radar code
+	Date : int
+		Date in format yyyymmdd (can be one or two elements)
+	ut : float
+		UT range in hours since the start of the day (2 elements)
+		
+	Returns
+	=======
+	filesp : str
+		Array of files including their paths
+	files : str
+		Array of file names without their paths.
+	
+	'''
+	
 	#get the base path for the radar
 	RadarPath = Globals.FitACFPath + '{:s}/'.format(Radar.lower())
 	

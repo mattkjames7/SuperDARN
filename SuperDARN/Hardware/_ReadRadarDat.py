@@ -3,7 +3,15 @@ from .. import Globals
 import PyFileIO as pf
 
 def _ReadRadarDat():
+	'''
+	This function will attempt to read the information from radar.dat
 	
+	Returns
+	=======
+	out : numpy.recarray
+		Radar information
+	
+	'''
 	
 	#the name of the file to read
 	fname = Globals.HardwarePath + 'radar.dat'

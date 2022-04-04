@@ -2,8 +2,21 @@ import numpy as np
 
 def _OldModel(r,Altitude=400.0):
 	'''
-	Return the old model of the virtual height (as defined in Chisham et
-	al. 2008).
+	Return the old model of the virtual height. I'm not sure where this 
+	originates, but it is defined in Chisham et al 2008
+	(https://doi.org/10.5194/angeo-26-823-2008).
+	
+	Inputs
+	======
+	r : float
+		Slant range (km)
+	Altitude : float
+		The maximum virtual height of the old model (km).
+		
+	Returns
+	=======
+	hv : float
+		Virtual height in (km)
 	
 	'''
 	if r < 150.0:
@@ -18,6 +31,20 @@ def _OldModel(r,Altitude=400.0):
 def _ChishamModel(r,Altitude=400.0):
 	'''
 	Return the Chisham et al 2008 model for virtual height.
+	(see https://doi.org/10.5194/angeo-26-823-2008)
+
+	Inputs
+	======
+	r : float
+		Slant range (km)
+	Altitude : float
+		The maximum virtual height of the old model (km).
+		
+	Returns
+	=======
+	hv : float
+		Virtual height in (km)
+
 	'''
 	#constants for the different half-hops
 	A = [108.974,384.416,1098.28]
@@ -39,7 +66,8 @@ def _ChishamModel(r,Altitude=400.0):
 
 def _VirtualHeight(r,Model='chisham08',Altitude=400.0):
 	'''
-	Use Chisham et al 2008 
+	Use Chisham et al 2008 or old models for defining virtual height
+	(https://doi.org/10.5194/angeo-26-823-2008).
 	
 	Inputs
 	======

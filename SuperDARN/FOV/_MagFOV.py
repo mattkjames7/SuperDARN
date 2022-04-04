@@ -6,6 +6,21 @@ def _MagFOV(glon,glat,Date):
 	'''
 	Calculate the magnetic coordinates of the FOV for a given date.
 	
+	Inputs
+	======
+	glon : float
+		Geographic longitudes (degrees)
+	glat : float
+		Geographic latitudes (degrees)
+	
+	Returns
+	=======
+	mlon : float
+		Magnetic longitudes (degrees)
+	mlat : float
+		Magnetic latitudes (degrees)
+		
+	
 	'''
 	#get datetime
 	dt = TT.Datetime(Date,0.0)[0]

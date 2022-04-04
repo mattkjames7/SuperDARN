@@ -11,6 +11,28 @@ def GetFOV(Radar,Date=None,frang=180.0,rsep=45.0,
 	'''
 	Get a FOV object either from memory or file.
 	
+	Inputs
+	======
+	Radar : str
+		Radar code
+	Date : int
+		Date in format yyyymmdd
+	frang : float
+		Distance to the first range (km)
+	rsep : float
+		range separation (km)
+	Altitude : float
+		Maximum virtual height (only used if Model='old')
+	Model : str
+		Virtual height model: 'chisham08'|'old'
+	
+	Returns
+	=======
+	fov : FOVObj
+		Object containing the geographic coordinates of each cell and a 
+		few basic functions which can return/plot the FOV in geographic
+		and	magnetic coordinates.
+	
 	'''
 	#get hardware
 	if Date is None:
