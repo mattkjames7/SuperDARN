@@ -8,7 +8,7 @@ def _MagFOV(glon,glat,Date):
 	
 	'''
 	#get datetime
-	dt = TT.Datetime(Date,0.0)
+	dt = TT.Datetime(Date,0.0)[0]
 	
 	#alt = 0.0
 	alt = np.zeros(glon.size,dtype='float32')
@@ -16,7 +16,7 @@ def _MagFOV(glon,glat,Date):
 	lat = glat.flatten()
 	s = glon.shape
 	
-	mlat,mlon,_ = aacgmv2.convert_latlon_arr(lat,lon,alt,dt,method='G2A')
+	mlat,mlon,_ = aacgmv2.convert_latlon_arr(lat,lon,alt,dt,method_code='G2A')
 	
 	return mlon.reshape(s),mlat.reshape(s)
 	

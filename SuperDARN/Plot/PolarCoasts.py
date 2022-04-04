@@ -1,6 +1,6 @@
 import numpy as np
 from ..Tools.ReadCoasts import ReadCoasts
-
+from ..Tools.ConvertGeo import ConvertGeo
 import aacgmv2
 import DateTimeTools as TT
 from ..Tools.Today import Today
@@ -37,7 +37,7 @@ def PolarCoasts(ax,Date=None,ut=None,Mag=True,Lon=False,Hemisphere='North',
 		'igrf'|'aacgm'
 		
 	'''
-	
+
 	#get date and time
 	if Date is None:
 		Date = Today()
@@ -48,37 +48,7 @@ def PolarCoasts(ax,Date=None,ut=None,Mag=True,Lon=False,Hemisphere='North',
 	lons,lats = ReadCoasts()
 	
 	#convert to the appropriate coordinate system
-	if Mag and Method == 'igrf':
-		try:
-			import PyGeopack as gp
-		except:
-			print('PyGeopack needed to use Method="igrf"')
-			Method = 'aacgm'	
-	
-	if Mag:
-		if Method == 'igrf':
-			mlon,mlat = gp.Coords.GEOtoMAGLL(lons,lats,Date,ut)
-			r = mlat
-			if Lon == False:	
-				mlt = gp.Coords.MLONtoMLT(mlon,Date,ut)
-				t = mlt*15*np.pi/180.0
-			else:
-				t = mlon*np.pi/180.0
-		else:
-			DT = TT.Datetime(Date,ut)
-			mlat,mlon,_ = aacgmv2.convert_latlon_arr(lats,lons,0.0,DT[0],method_code='G2A')
-			r = mlat
-			if Lon == False:	
-				mlt = aacgmv2.convert_mlt(mlon,DT[0])
-				t = mlt*15*np.pi/180.0
-			else:
-				t = mlon*np.pi/180.0
-	else:
-		r = lats
-		if Lon:
-			t = lons*np.pi/180.0
-		else:
-			t = (lons + 15*ut)*np.pi/180.0
+	t,r = ConvertGeo(lons,lats,Date=Date,ut=ut,Mag=Mag,Lon=Lon,Method=Method)
 
 	#reverse r if we are polotting the south
 	if Hemisphere.lower() == 'south' or Hemisphere.lower() == 's':
@@ -93,7 +63,8 @@ def PolarCoasts(ax,Date=None,ut=None,Mag=True,Lon=False,Hemisphere='North',
 		ti = t[zero[i]+1:zero[i+1]-1]
 		ri = r[zero[i]+1:zero[i+1]-1]
 		
-		ax.plot(ti,ri,color=color)
+		if (ri > 0.0).any():
+			ax.plot(ti,ri,color=color)
 
-		if not Fill is None:
-			ax.fill(ti,ri,color=Fill,zorder=zorder)
+			if not Fill is None:
+				ax.fill(ti,ri,color=Fill,zorder=zorder)
