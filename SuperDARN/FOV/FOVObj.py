@@ -4,13 +4,12 @@ from .SaveFOV import SaveFOV
 from .. import Globals
 import PyFileIO as pf
 from ..Tools.Today import Today
-from ..Plot.PolarAxis import PolarAxis
-from ..Plot.PolarCoasts import PolarCoasts
 import DateTimeTools as TT
 from ..Tools.Today import Today
 from ..Tools.Now import Now
 import aacgmv2
 from ..Tools.ConvertGeo import ConvertGeo
+from ..Tools.ConvertGeoCart import ConvertGeoCart
 from ._MagFOV import _MagFOV
 
 class FOVObj(object):
@@ -129,14 +128,39 @@ class FOVObj(object):
 		
 		return lon[Beams,Gates],lat[Beams,Gates]
 		
+
+	def CellCorners(self,Beams,Gates,Date=None,ut=None,Mag=False,GS=False):
 		
+		lon,lat = self.GetFOV(Center=False,Mag=Mag,GS=GS,Date=Date)
+		
+		#output cells
+		clon = []
+		clat = []
+		for b,g in zip(Beams,Gates):
+			ln00 = lon[b,g]
+			ln10 = lon[b+1,g]
+			ln11 = lon[b+1,g+1]
+			ln01 = lon[b,g+1]
+			lt00 = lat[b,g]
+			lt10 = lat[b+1,g]
+			lt11 = lat[b+1,g+1]
+			lt01 = lat[b,g+1]
+			clon.append(np.array([ln00,ln10,ln11,ln01]))
+			clat.append(np.array([lt00,lt10,lt11,lt01]))
+		
+		return clon,clat
 
 	def PlotPolar(self,Beams=None,Gates=None,color='black',linewidth=0.5,
 					ShowBeams=True,ShowCells=True,Mag=False,
 					GS=False,Date=None,ut=None,fig=None,maps=[1,1,0,0],
 					eqlat=45.0,ShowLatLines=True,ShowLonLines=True,
 					Background=None,Continents=None,Coasts='black',
-					Lon=False,Method='aacgm'):
+					Lon=False,Method='aacgm',Cart=True):
+
+		from ..Plot.PolarAxis import PolarAxis
+		from ..Plot.PolarCoasts import PolarCoasts
+		from ..Plot.CartPolarAxis import CartPolarAxis
+		from ..Plot.CartPolarCoasts import CartPolarCoasts
 
 		#get date and time
 		if Date is None:
@@ -144,30 +168,48 @@ class FOVObj(object):
 		if ut is None:
 			ut = Now()			
 
-
-		#create the axes
-		if fig is None:
-			ax = PolarAxis(maps=maps,eqlat=eqlat,ShowLatLines=ShowLatLines,
-							ShowLonLines=ShowLonLines,Background=Background)
-			if self.fov['glat'][0][0] > 0:
-				hem = 'north'
-			else:
-				hem = 'south'
-			PolarCoasts(ax,Date=Date,ut=ut,Lon=Lon,Hemisphere=hem,Mag=Mag,
-						Fill=Continents,Method=Method,color=Coasts)
+		#get the hemisphere
+		if self.fov['glat'][0][0] > 0:
+			hem = 'north'
 		else:
-			ax = fig		
-
+			hem = 'south'
 
 		#get the FOV
 		lon,lat = self.GetFOV(Beams=Beams,Gates=Gates,Mag=False,GS=GS,Date=Date)
 		
-		#convert to the appropriate coordinate system
-		t,r = ConvertGeo(lon,lat,Date=Date,ut=ut,Mag=Mag,Lon=Lon,Method=Method)
-				
-		if self.fov['glat'][0][0] < 0:
-			r = -r
+		if Cart:
+			#convert to the appropriate coordinate system
+			t,r = ConvertGeoCart(lon,lat,Date=Date,ut=ut,Mag=Mag,Lon=Lon,Method=Method,Hemisphere=hem)
+		else:
+			#convert to the appropriate coordinate system
+			t,r = ConvertGeo(lon,lat,Date=Date,ut=ut,Mag=Mag,Lon=Lon,Method=Method)
+					
+			if self.fov['glat'][0][0] < 0:
+				r = -r
 			
+
+		#create the axes
+		if fig is None:
+
+			if Cart:
+				xrnge = [t.min()-5,t.max()+5]
+				yrnge = [r.min()-5,r.max()+5]
+				ax = CartPolarAxis(maps=maps,xrnge=xrnge,yrnge=yrnge,ShowLatLines=ShowLatLines,
+								ShowLonLines=ShowLonLines,Background=Background)
+
+				CartPolarCoasts(ax,Date=Date,ut=ut,Lon=Lon,Hemisphere=hem,Mag=Mag,
+							Fill=Continents,Method=Method,color=Coasts)
+			else:			
+				ax = PolarAxis(maps=maps,eqlat=eqlat,ShowLatLines=ShowLatLines,
+								ShowLonLines=ShowLonLines,Background=Background)
+
+				PolarCoasts(ax,Date=Date,ut=ut,Lon=Lon,Hemisphere=hem,Mag=Mag,
+							Fill=Continents,Method=Method,color=Coasts)
+		else:
+			ax = fig		
+
+
+
 		#plot each beam edge
 		if ShowBeams:
 			for i in range(0,t.shape[0]):
@@ -190,48 +232,73 @@ class FOVObj(object):
 					Mag=False,GS=False,Date=None,ut=None,fig=None,maps=[1,1,0,0],
 					eqlat=45.0,ShowLatLines=True,ShowLonLines=True,
 					Background=None,Continents=None,Coasts='black',
-					Lon=False,Method='aacgm'):
-		
+					Lon=False,Method='aacgm',Cart=True):
+
+		from ..Plot.PolarAxis import PolarAxis
+		from ..Plot.PolarCoasts import PolarCoasts
+		from ..Plot.CartPolarAxis import CartPolarAxis
+		from ..Plot.CartPolarCoasts import CartPolarCoasts
+				
 		#get date and time
 		if Date is None:
 			Date = Today()
 		if ut is None:
 			ut = Now()			
 
-
-		#create the axes
-		if fig is None:
-			ax = PolarAxis(maps=maps,eqlat=eqlat,ShowLatLines=ShowLatLines,
-							ShowLonLines=ShowLonLines,Background=Background)
-			if self.fov['glat'][0][0] > 0:
-				hem = 'north'
-			else:
-				hem = 'south'
-			PolarCoasts(ax,Date=Date,ut=ut,Lon=Lon,Hemisphere=hem,
-						Fill=Continents,Method=Method,color=Coasts)
+		#get the hemisphere
+		if self.fov['glat'][0][0] > 0:
+			hem = 'north'
 		else:
-			ax = fig		
-
+			hem = 'south'
 
 		#get the FOV
 		lon,lat = self.GetFOV(Mag=Mag,GS=GS,Date=Date)
 		
-		#convert to the appropriate coordinate system
-		t,r = ConvertGeo(lon,lat,Date=Date,ut=ut,Mag=Mag,Lon=Lon,Method=Method)
-				
-		if self.fov['glat'][0][0] < 0:
-			r = -r
-		
+		if Cart:
+			#convert to the appropriate coordinate system
+			t,r = ConvertGeoCart(lon,lat,Date=Date,ut=ut,Mag=Mag,Lon=Lon,Method=Method,Hemisphere=hem)
+		else:
+			#convert to the appropriate coordinate system
+			t,r = ConvertGeo(lon,lat,Date=Date,ut=ut,Mag=Mag,Lon=Lon,Method=Method)
+					
+			if self.fov['glat'][0][0] < 0:
+				r = -r
+			
+		#create the axes
+		if fig is None:
+			if Cart:
+				xrnge = [t.min()-5,t.max()+5]
+				yrnge = [r.min()-5,r.max()+5]
+				ax = CartPolarAxis(maps=maps,xrnge=xrnge,yrnge=yrnge,ShowLatLines=ShowLatLines,
+								ShowLonLines=ShowLonLines,Background=Background)
+
+				CartPolarCoasts(ax,Date=Date,ut=ut,Lon=Lon,Hemisphere=hem,Mag=Mag,
+							Fill=Continents,Method=Method,color=Coasts)
+			else:			
+				ax = PolarAxis(maps=maps,eqlat=eqlat,ShowLatLines=ShowLatLines,
+								ShowLonLines=ShowLonLines,Background=Background)
+
+				PolarCoasts(ax,Date=Date,ut=ut,Lon=Lon,Hemisphere=hem,Mag=Mag,
+							Fill=Continents,Method=Method,color=Coasts)
+		else:
+			ax = fig		
+
+
+
 		#plot the cells
 		nC = np.size(Beams)
 		for i in range(0,nC):
-			t0 = t[Beams[i],Gates[i]]
-			t1 = t[Beams[i]+1,Gates[i]+1]			
-			r0 = r[Beams[i],Gates[i]]
-			r1 = r[Beams[i]+1,Gates[i]+1]
+			t00 = t[Beams[i],Gates[i]]
+			r00 = r[Beams[i],Gates[i]]
+			t10 = t[Beams[i]+1,Gates[i]]
+			r10 = r[Beams[i]+1,Gates[i]]
+			t01 = t[Beams[i],Gates[i]+1]
+			r01 = r[Beams[i],Gates[i]+1]
+			t11 = t[Beams[i]+1,Gates[i]+1]
+			r11 = r[Beams[i]+1,Gates[i]+1]
 			
-			rp = [r0,r0,r1,r1,r0]
-			tp = [t0,t1,t1,t0,t0]
+			rp = [r00,r10,r11,r01,r00]
+			tp = [t00,t10,t11,t01,t00]
 			
 			ax.plot(tp,rp,color=color,linewidth=linewidth)
 			

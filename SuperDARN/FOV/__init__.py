@@ -4,3 +4,5 @@ from .SaveFOV import SaveFOV
 from .FOVCoords import FOVCoords
 from .GetFOV import GetFOV
 from .PopulateFOV import PopulateFOV
+from .LongitudinalCellArray import LongitudinalCellArray
+from .LatitudinalCellArray import LatitudinalCellArray

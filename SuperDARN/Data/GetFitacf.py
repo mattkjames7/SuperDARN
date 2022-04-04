@@ -38,8 +38,13 @@ def GetFitacf(Radar,Date,ut=[0.0,24.0],Reload=False):
 	
 	
 	#get the key
-	ut0 = np.int32(2.0*np.floor(ut[0]/2.0))
-	ut1 = np.int32(2.0*np.ceil(ut[1]/2.0))	
+	if np.size(ut) == 2:
+		ut0 = np.int32(2.0*np.floor(ut[0]/2.0))
+		ut1 = np.int32(2.0*np.ceil(ut[1]/2.0))	
+	else:
+		ut0 = np.int32(2.0*np.floor(ut/2.0))	
+		ut1 = ut0 + 2
+		ut = [ut0,ut1]
 	if np.size(Date) == 1:
 		key = Radar.lower()+'-{:08d}T{:02d}-{:08d}T{:02d}'.format(Date,ut0,Date,ut1)
 	else:

@@ -27,7 +27,7 @@ def GetBeamData(Radar,Date,ut,Beam):
 	
 	#get the data first
 	sc,data = GetFitacf(Radar,Date,ut=ut)
-	
+
 	#select this beam
 	use = np.where(data.Beam == Beam)[0]
 	uses = np.where(sc.Beam == Beam)[0]
@@ -41,16 +41,25 @@ def GetBeamData(Radar,Date,ut,Beam):
 	#limit time
 	utc = TT.ContUT(data.Date,data.ut)
 	utcs = TT.ContUT(sc.Date,sc.ut)
-	if np.size(Date) == 1:
-		utcr = TT.ContUT(np.array([Date,Date]),ut)
+	if np.size(ut) == 2:
+		if np.size(Date) == 1:
+			utcr = TT.ContUT(np.array([Date,Date]),ut)
+		else:
+			utcr = TT.ContUT(Date,ut)
+		use = np.where((utc >= utcr[0]) & (utc <= utcr[1]))[0]
+		uses = np.where((utcs >= utcr[0]) & (utcs <= utcr[1]))[0]
 	else:
-		utcr = TT.ContUT(Date,ut)
-	use = np.where((utc >= utcr[0]) & (utc <= utcr[1]))[0]
-	uses = np.where((utcs >= utcr[0]) & (utcs <= utcr[1]))[0]
+		#find nearest time
+		utcr = TT.ContUT(Date,ut)[0]
+		dt = np.abs(utcr - utc)
+		dts = np.abs(utcr - utcs)
+		
+		use = np.where(dt == dt.min())[0]
+		uses = np.where(dts == dts.min())[0]
 
 	if use.size == 0:
 		return None
-	
+
 	data = data[use]
 	sc = sc[uses]
 	
