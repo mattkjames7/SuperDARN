@@ -1,6 +1,8 @@
 # SuperDARN
 
-Some simple tools for reading and plotting SuperDARN data. Code here is based on some old code I wrote after transitioning from IDL to Python, there may be mistakes so use with caution!
+Some simple tools for reading and plotting SuperDARN data. Code here is based on some old code I wrote after transitioning from IDL to Python, there will be mistakes so use with caution!
+
+Also, the name may change at some point...
 
 ## Installation
 
