@@ -19,7 +19,7 @@ def PopulateFOV():
 	for i in range(0,nr):
 		print('\rLoading Radar FOV {0} of {1}'.format(i+1,nr),end='')
 		hw = GetRadarHW(rads.Code[i])
-		for date in hw.EndDate:
+		for date in hw.StartDate:
 			GetFOV(rads.Code[i],date)
 	print()
 	print('Done')

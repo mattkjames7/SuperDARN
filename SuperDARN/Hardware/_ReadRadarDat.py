@@ -20,7 +20,7 @@ def _ReadRadarDat():
 	lines = pf.ReadASCIIFile(fname)
 	
 	#work out where the data starts
-	splits = [3,5,14,23,50,88,102,108]
+	splits = [3,6,15,24,51,89,103,109]
 	data = []
 	for l in lines:		
 		if l[0] != '#' and len(l) > 100:

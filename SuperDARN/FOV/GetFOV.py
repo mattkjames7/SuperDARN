@@ -38,7 +38,7 @@ def GetFOV(Radar,Date=None,frang=180.0,rsep=45.0,
 	if Date is None:
 		Date = Today()
 	hw = GetRadarHW(Radar,Date)
-	rDate = hw.EndDate
+	rDate = hw.StartDate
 	
 	#get the string 
 	s = _FOVstr(Radar,rDate,frang,rsep,Model)

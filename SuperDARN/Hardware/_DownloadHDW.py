@@ -16,7 +16,7 @@ def _DownloadHDW():
 	'''
 	
 	#address of the master zip
-	gitadr = 'https://github.com/SuperDARN/rst/archive/refs/heads/master.zip'
+	gitadr = 'https://github.com/SuperDARN/rst/archive/refs/heads/main.zip'
 	
 	#download the zip
 	hwpath = Globals.HardwarePath
@@ -26,11 +26,11 @@ def _DownloadHDW():
 	os.system('unzip -q '+hwpath+'rst.zip -d '+hwpath)
 	
 	#copy the files we need
-	os.system('cp -r '+hwpath+'rst-master/tables/superdarn/hdw '+hwpath)
-	os.system('cp '+hwpath+'rst-master/tables/superdarn/radar.dat '+hwpath)
+	os.system('cp -r '+hwpath+'rst-main/tables/superdarn/hdw '+hwpath)
+	os.system('cp '+hwpath+'rst-main/tables/superdarn/radar.dat '+hwpath)
 
 	#remove the other stuff
-	os.system('rm -fr '+hwpath+'rst-master/')
+	os.system('rm -fr '+hwpath+'rst-main/')
 	os.system('rm '+hwpath+'rst.zip')
 
 	#check if it worked

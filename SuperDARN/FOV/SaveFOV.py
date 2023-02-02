@@ -50,7 +50,6 @@ def SaveFOV(Radar,Date,frang=180.0,rsep=45.0,
 	
 	#save it
 	pf.SaveObject(fov,Globals.FOVPath + fname)
-	
 	#add to the index
 	if not inidx:
 		AddIndex(Radar,Date,frang,rsep,Model,fname)
