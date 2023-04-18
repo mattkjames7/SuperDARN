@@ -34,7 +34,7 @@ def GetRadarHW(Radar,Date=None):
 	
 	#select by date
 	if not Date is None:
-		use = np.where(hw.StartDate <= Date)[0]
+		use = np.where(hw.StartDate <= np.max(Date))[0]
 		
 		if use.size > 0:
 			hw = hw[use[-1]]
